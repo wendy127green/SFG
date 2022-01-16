@@ -4,7 +4,7 @@ By Lin Ge, Xingyue Wei, Yayu Hao, Jianwen Luo, Yan Xu.
 
 
 ## Introduction
-This is the code for DSFG. For more details, please refer to our paper.
+This is the code for SFG. For more details, please refer to our paper.
 
 Code has been tested with Python 3.6 and MXNet 1.5.
 

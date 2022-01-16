@@ -1,0 +1,11 @@
+validation_steps:
+  20
+
+checkpoint_steps:
+  20
+
+dataset:
+  ANHIR
+
+subset:
+  ""

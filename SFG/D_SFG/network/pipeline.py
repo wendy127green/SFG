@@ -107,7 +107,7 @@ class PipelineFlownet:
 		rgb_mean = nd.concat(img1, img2, dim = 2).mean(axis = (2, 3)).reshape((-2, 1, 1))
 		return img1 - rgb_mean, img2 - rgb_mean, rgb_mean
 
-	def train_batch(self, dist_weight, img1, img2, lmk1s, lmk2s, sift1, sift2, color_aug, aug):
+	def train_batch(self, raw_weight, img1, img2, lmk1s, lmk2s, sift1, sift2, color_aug, aug):
 		losses = []
 		reg_losses = []
 		raw_losses = []
@@ -133,8 +133,8 @@ class PipelineFlownet:
 				# raw loss calculation
 				raw_loss = self.raw_loss_op(sift1s, warp)
 				reg_loss = self.regularization_op(flow) + self.boundary_loss_op(flow) * self.boundary_weight
-				self.reg_weight = 1 #0.2
-				loss = raw_loss * self.raw_weight + reg_loss * self.reg_weight + dist_loss*dist_weight
+
+				loss = raw_loss * raw_weight + reg_loss * self.reg_weight
 				losses.append(loss)
 				reg_losses.append(reg_loss)
 				raw_losses.append(raw_loss)

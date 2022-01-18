@@ -442,7 +442,7 @@ while True:
 	batch = batch_queue.get()
 	loading_time.update(default_timer() - t0)
 	img1, img2, lmk1, lmk2, sift1, sift2 = [batch[i] for i in range(6)]
-	dist_weight = args.weight
+	raw_weight = args.weight
 
 
 	# do valiation
@@ -466,7 +466,7 @@ while True:
 					remove_queue.put(prefix + '.params')
 					remove_queue.put(prefix + '.states')
 	# do validation first, then begin training. To present the validation before train.
-	train_log = pipe.train_batch(dist_weight, img1, img2, lmk1, lmk2, sift1, sift2, color_aug, aug)
+	train_log = pipe.train_batch(raw_weight, img1, img2, lmk1, lmk2, sift1, sift2, color_aug, aug)
 	# update log
 	if steps <= 3000 or steps % 20 == 0:
 		train_avg.update(train_log)

@@ -7,3 +7,9 @@ def get_pipeline(network, **kwargs):
 		return pipeline.PipelineFlownet(**kwargs)
 	else:
 		raise NotImplementedError
+
+def get_pipeline_SFG(network, **kwargs):
+	if network == 'MaskFlownet':
+		return pipeline_SFG.PipelineFlownet(**kwargs)
+	else:
+		raise NotImplementedError

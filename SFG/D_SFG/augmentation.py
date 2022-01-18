@@ -64,34 +64,7 @@ class Augmentation(nn.HybridBlock):
 		img2 = F.BilinearSampler(data=img2, grid=grid_2)
 
 		return img1, img2
-'''
-class ChromaticBrightnessAugmentation(nn.HybridBlock):
-	def __init__(self, brightness = 0.5, batch_size = 1, **kwargs):
-		super().__init__(**kwargs)
-		self.brightness = brightness
-		self.batch_size = batch_size
-	def hybrid_forward(self, F, img):
-		aug = img
-		alpha = 1.0 + F.random.uniform(-self.brightness, self.brightness, shape = (self.batch_size, 1, 1, 1))
-		aug = F.broadcast_mul(aug, alpha)
-		return aug
 
-class ChromaticContrastAugmentation(nn.HybridBlock):
-	def __init__(self, contrast = 0.5, batch_size = 1, **kwargs):
-		super().__init__(**kwargs)
-		self.contrast = contrast
-		self.coefficient = [0.299, 0.587, 0.114]
-		self.batch_size = batch_size
-	def hybrid_forward(self, F, img):
-		aug = img
-		alpha = 1.0 + F.random.uniform(-self.contrast, self.contrast, shape = (self.batch_size, 1, 1, 1))
-		gray = F.concat(*[img.slice_axis(axis = 1, begin = k, end = k + 1) * self.coefficient[k] for k in range(3)], dim = 1)
-		mean = F.mean(gray, keepdims = True, axis = (1, 2, 3))
-		gray = 3.0 * (1.0 - alpha) * mean
-		aug = F.broadcast_mul(aug, alpha)
-		aug = F.broadcast_add(aug, gray)
-		return aug
-'''
 class ChromaticSHAugmentation(nn.HybridBlock):
 	def __init__(self, saturation = 0.5, hue = 0.5, batch_size = 1, **kwargs):
 		super().__init__(**kwargs)
@@ -115,56 +88,7 @@ class ChromaticSHAugmentation(nn.HybridBlock):
 					[0.299 - 0.300 * su + 1.250 * sw, 0.587 - 0.588 * su - 1.050 * sw, 0.114 + 0.886 * su - 0.203 * sw]]
 		aug = F.concat(*[sum([F.broadcast_mul(aug.slice_axis(axis = 1, begin = j, end = j + 1), matrix[i][j]) for j in range(3)]) for i in range(3)], dim = 1)
 		return aug
-'''
-class ChromaticGammaAugmentation(nn.HybridBlock):
-	def __init__(self, gamma = (0.7, 1.5), batch_size = 1, **kwargs):
-		super().__init__(**kwargs)
-		self.gamma_min, self.gamma_max = gamma
-		self.batch_size = batch_size
-	def hybrid_forward(self, F, img):
-		aug = img
-		alpha = F.random.uniform(self.gamma_min, self.gamma_max, shape = (self.batch_size, 1, 1, 1))
-		aug = F.broadcast_power(aug, alpha)
-		return aug
 
-class ChromaticEigenAugmentation(nn.HybridBlock):
-	def __init__(self, batch_size = 1, **kwargs):
-		super().__init__(**kwargs)
-		self.batch_size = batch_size
-	def hybrid_forward(self, F, img):
-		spin_angle = F.random.uniform(low = -np.pi, high = np.pi, shape = (self.batch_size, 3, 1, 1))
-		cos_ = [F.cos(spin_angle).slice_axis(axis = 1, begin = k, end = k + 1) for k in range(3)]
-		sin_ = [F.sin(spin_angle).slice_axis(axis = 1, begin = k, end = k + 1) for k in range(3)]
-		spin_matrix = [ [  cos_[0] * cos_[1], sin_[1] * cos_[2] + sin_[0] * cos_[1] * sin_[2], sin_[1] * sin_[2] - sin_[0] * cos_[1] * cos_[2]],
-						[- cos_[0] * sin_[1], cos_[1] * cos_[2] - sin_[0] * sin_[1] * sin_[2], cos_[1] * sin_[2] + sin_[0] * sin_[1] * cos_[2]],
-						[  sin_[0]		  ,				   - cos_[0] * sin_[2]		  ,					 cos_[0] * cos_[2]		  ]]
-		aug = F.concat(*[sum([F.broadcast_mul(img.slice_axis(axis = 1, begin = j, end = j + 1), spin_matrix[i][j]) for j in range(3)]) for i in range(3)], dim = 1)
-		return aug
-
-class ChromaticComposeAugmentation(nn.Block):
-	def __init__(self, brightness = 0.2, contrast = 0.5, saturation = 0.5, hue = 0.5, gamma = (0.7, 1.5), batch_size = 1, **kwargs):
-		super().__init__(**kwargs)
-		self.brightness = brightness
-		self.contrast = contrast
-		self.saturation = saturation
-		self.hue = hue
-		self.gamma = gamma
-		self.batch_size = batch_size
-		self.aug_brightness = ChromaticBrightnessAugmentation(self.brightness, self.batch_size)
-		self.aug_contrast = ChromaticContrastAugmentation(self.contrast, self.batch_size)
-		self.aug_sh = ChromaticSHAugmentation(self.saturation, self.hue, self.batch_size)
-		self.augs = [self.aug_brightness, self.aug_contrast, self.aug_sh]
-		self.Gamma = ChromaticGammaAugmentation(self.gamma, self.batch_size)
-	
-	def forward(self, img1, img2):
-		aug = nd.concat(img1, img2, dim = 2)
-		augs = random.sample(self.augs, 3)
-		for aug_op in augs:
-			aug = aug_op(aug)
-		aug = aug.clip(0, 1)
-		aug = self.Gamma(aug)
-		return nd.split(aug, axis = 2, num_outputs = 2)
-'''
 class ColorAugmentation(nn.HybridBlock):
 	def __init__(self, contrast_range, brightness_sigma, channel_range, batch_size, shape, noise_range,
 		saturation, hue, gamma_range = None, eigen_aug = False, **kwargs):

@@ -57,11 +57,11 @@ The input data of key points should be auto-obtained key points.
 ## Reference
 
 ```
-@inproceedings{zhao2020maskflownet,
-  author = {Zhao, Shengyu and Sheng, Yilun and Dong, Yue and Chang, Eric I-Chao and Xu, Yan},
-  title = {MaskFlownet: Asymmetric Feature Matching with Learnable Occlusion Mask},
-  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year = {2020}
+@inproceedings{ge2022SFG,
+  author = {Lin Ge, Xingyue Wei, Yayu Hao, Jianwen Luo, Yan Xu},
+  title = {Unsupervised Histological Image Registration Using Structural Feature Guided Convolutional Neural Network},
+  booktitle = {},
+  year = {2022}
 }
 ```
 

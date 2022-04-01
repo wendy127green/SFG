@@ -61,10 +61,10 @@ infer_resize = [int(s) for s in args.resize.split(',')] if args.resize else None
 import network.config
 # load network configuration
 with open(os.path.join(repoRoot, 'network', 'config', args.config)) as f:
-	config =  network.config.Reader(yaml.load(f))
+	config =  network.config.Reader(yaml.safe_load(f))
 # load training configuration
 with open(os.path.join(repoRoot, 'network', 'config', args.dataset_cfg)) as f:
-	dataset_cfg = network.config.Reader(yaml.load(f))
+	dataset_cfg = network.config.Reader(yaml.safe_load(f))
 validation_steps = dataset_cfg.validation_steps.value
 checkpoint_steps = dataset_cfg.checkpoint_steps.value
 
@@ -347,6 +347,10 @@ t1 = None
 checkpoints = []
 maxkpval = 100
 while True:
+	if args.valid:
+		raw, eva, eva_mask, kpval = validate()
+		log.log('steps= {} raw= {} kp_mean= {} kp_mean_median= {} eva_kp= {}'.format(steps, raw, eva, eva_mask, kpval))
+		sys.exit(0)
 	steps += 1
 	if not pipe.set_learning_rate(steps):
 		sys.exit(0)

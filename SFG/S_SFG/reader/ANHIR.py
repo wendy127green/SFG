@@ -10,10 +10,7 @@ from numpy import *
 import skimage
 import random
 
-
-# def LoadANHIR(prep_name, subsets = [""], data_path = r"/data/gl/Data_for_deformable_reg"):
-# def LoadANHIR(prep_name, subsets = [""], data_path = r"/data/gl/Data_for_deformable_reg/grad_testing/1024/512to1024/threshold0.85zone0.04mutiscale_for_all_images"):
-def LoadANHIR(prep_name, subsets = [""], data_path = r"/data/gl/re_do_from_ori/data/data_for_deformable_network"):
+def LoadANHIR(prep_name, subsets = [""], data_path = r"/home/gelin/SFG/S_SFG/datasets/"):
     print('data_path', data_path)
     ##
     #randomratio = 0.75
@@ -25,12 +22,12 @@ def LoadANHIR(prep_name, subsets = [""], data_path = r"/data/gl/re_do_from_ori/d
     # prep_name2 = prep_name + '_affine_result_eva6_median_norm_with_siftkp'
 
     prep_name1 = prep_name + 'after_affine'
-    #prep_name2 = prep_name + '_from_512_after_manual_del_kpsamples'
+    prep_name2 = prep_name + '_kp_after_affine'
     #prep_name2 = 'oriresult_' + prep_name + '_after_manual_del_micekidney_csv'
 
     prep_path1 = os.path.join(data_path, prep_name1)
-    #prep_path2 = os.path.join(data_path, prep_name2)
-    prep_path = prep_path1
+    prep_path2 = os.path.join(data_path, prep_name2)
+    prep_path = prep_path2
     dataset = {}
     groups = {}
     train_groups = {}

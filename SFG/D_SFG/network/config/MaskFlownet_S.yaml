@@ -1,0 +1,11 @@
+optimizer:
+  learning_rate:
+    - [12000, 1.0e-4]
+    - [14000, 5.0e-5]
+    - [16000, 2.5e-5]
+    - [18000, 1.25e-5]
+    - [20000, 6.25e-6]
+
+network:
+  class:
+    MaskFlownet_S

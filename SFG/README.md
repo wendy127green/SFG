@@ -39,21 +39,16 @@ Code has been tested with Python 3.6 and MXNet 1.5.
 
 ## Datasets
 
-We use the dataset after affine registration.
+We use the dataset provided by ANHIR. For testing images, we invited an expert to manually annotate 6 pairs of landmarks on each evaluation image pair for analyzing our methods. If you need to use this dataset, please cite our paper.
 
 ## Training
 
-- To train unsupervised registration, go to D_SFG direction and run `python train_D_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c 2afApr28 --clear_steps --weight 0 --batch 1 --relative UM --prep 1024_with_lung_lesion_and_6points_as_eva_`. Or go to S_SFG direction and run `python train_S_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c 2afApr28 --clear_steps --weight 0 --batch 1 --relative UM --prep 1024_with_lung_lesion_and_6points_as_eva_`
+- To train D_SFG (Dense SFG), go to D_SFG direction and  run `python train_D_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c 2afApr28 --clear_steps --weight 1 --batch 1 --relative UM --prep 512.
 
-- To train supervised registration with landmarks, go to S_SFG direction and run `python train_S_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c 2afApr28 --clear_steps --weight 200 --batch 1 --relative UM --prep 1024_with_lung_lesion_and_6points_as_eva_`.
-The input data of key points should be landmarks.
-
-- To train D_SFG (Dense SFG), go to D_SFG direction and  run `python train_D_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c 2afApr28 --clear_steps --weight 1 --batch 1 --relative UM --prep 1024_with_lung_lesion_and_6points_as_eva_`.
-
-- To train S_SFG (Sparse SFG), go to S_SFG direction and run `python train_S_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c 2afApr28 --clear_steps --weight 200 --batch 1 --relative UM --prep 1024_with_lung_lesion_and_6points_as_eva_`.
+- To train S_SFG (Sparse SFG), go to S_SFG direction and run `python train_S_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c 2afApr28 --clear_steps --weight 200 --batch 1 --relative UM --prep 512.
 The input data of key points should be auto-obtained key points.
 
-- To train C_SFG/SFG (dense and sparse SFG), go to D_SFG direction and run `python train_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c 2afApr28 --clear_steps --weight1 1 --weight2 200 --batch 1 --relative UM --prep 1024_with_lung_lesion_and_6points_as_eva_`.
+- To train C_SFG/SFG (dense and sparse SFG), go to D_SFG direction and run `python train_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c 2afApr28 --clear_steps --weight1 1 --weight2 200 --batch 1 --relative UM --prep 512.
 ## Reference
 
 ```

@@ -1,8 +1,8 @@
 ###################Training
-To train D_SFG (Sparse SFG), run "python train_D_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c 2afApr28 --clear_steps --weight 200 --batch 1 --relative UM --prep 512". 
+To train D_SFG (Sparse SFG), run "python train_D_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c dceJan23 --clear_steps --weight 200 --batch 1 --relative UM --prep 512". 
 
 ###################Validation
-To validate D_SFG (Sparse SFG), run "python train_D_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c 2afApr28 --clear_steps --weight 200 --batch 1 --relative UM --prep 512 --valid". 
+To validate D_SFG (Sparse SFG), run "python train_D_SFG.py MaskFlownet_S.yaml --dataset_cfg ANHIR.yaml -g 0 -c dceJan23 --clear_steps --weight 200 --batch 1 --relative UM --prep 512 --valid". 
 
 
 

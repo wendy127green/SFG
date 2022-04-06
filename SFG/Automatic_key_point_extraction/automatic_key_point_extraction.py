@@ -21,7 +21,7 @@ def main():
     #dropthreshold = 0.95  # 0.95
     dropthreshold_multiscale = 0.65
     zone_ratio = 0.04*0.04
-    max_num = 1000  # 暂不重要
+    max_num = 1000 
     resultdir = r'.\result512\parameter_test\keep_multi_threshold_as_0.85\threshold'+str(dropthreshold_multiscale)+'zone'+str(np.sqrt(zone_ratio))+'mutiscale_for_all_images_without_morphological_change'
     imgfile = r'D:\journal\re_do_from_ori\s3_affine_result_obtain\zoom\512after_affine'
     newdir = os.path.join(resultdir, 'oriresult_512')  # r'.\orb_kp_siftflow_desc_result\oriresult_512'
@@ -39,7 +39,7 @@ def main():
     if not os.path.exists(newdirv):
         os.makedirs(newdirv)
 
-    for i in range(0, 500):#[5, 264, 239]:
+    for i in range(0, 500):
         siftflow1name = str(i) + 'sift1.mat'
         siftflow2name = str(i) + 'sift2.mat'
         sdir1 = os.path.join(siftflowdir, siftflow1name)
@@ -76,8 +76,8 @@ def main():
                 # fy = 0.5#0.2
                 # gray1 = cv2.resize(gray1, (0, 0), fx=fx, fy=fy, interpolation=cv2.INTER_CUBIC)
                 # gray2 = cv2.resize(gray2, (0, 0), fx=fx, fy=fy, interpolation=cv2.INTER_CUBIC)
-                kp1, des1 = orb.detectAndCompute(gray1, None)  # des是描述子
-                kp2, des2 = orb.detectAndCompute(gray2, None)  # des是描述子
+                kp1, des1 = orb.detectAndCompute(gray1, None)  
+                kp2, des2 = orb.detectAndCompute(gray2, None)  
                 filtered_coords1 = []
                 filtered_coords1, des1 = addsiftkp(filtered_coords1, kp1, des1)
                 filtered_coords2 = []
@@ -133,7 +133,7 @@ def main():
 
 
 def get_img_median(img):
-    threshold = 10 # 认为是背景的阈值
+    threshold = 10 
     imgsize = np.shape(img)
     mask = np.zeros(imgsize)
     mask[img > threshold] = 1
@@ -163,7 +163,6 @@ def plot_harris_points(image, filtered_coords, name):
 def addsiftkp(coords, kp,desc):
     len = np.shape(kp)[0]
     descnew=[]
-    ## init , raw 0 is 0, 这样后面匹配到第一个点的匹配不会被当成不匹配而消去
     sizedesc = np.shape(desc[0])
     coords.append([0, 0])
     descnew.append(np.zeros(sizedesc))
@@ -211,7 +210,6 @@ def get_harris_points(harrisim, min_dist=10, threshold=0.1):
     return filtered_coords
 
 def keepjudge(coords, img):
-    # 临时写的，为确定参数
     for coord in coords:
         if coord[0] > 363 and coord[0] < 404 and coord[1] > 114 and coord[1] < 159:
             for coord in coords:
@@ -261,14 +259,13 @@ def match(kp1, kp2, desc1, desc2, imsize,dotprod_threshold,zone_ratio):
         if len(indx) > 1 and dist_ratio!=0:
             if dotprods[indx[1]] != 0:
                 if dist_ratio * dotprods[indx[0]] > dotprods[indx[1]]:
-                    if dotprods[indx[0]]>dotprod_threshold: # 20200612 除了上面的第一大于第二一个比例，添加了第一相似度要达到某个阈值
+                    if dotprods[indx[0]]>dotprod_threshold: 
                         contnum = contnum + 1
                         # print('dotprods', contnum, dotprods[indx[0]], dotprods[indx[1]], dotprods[indx[2]])
                         matchscores[i] = int(indx[0])
                         scoresvalue[i] = float(dotprods[indx[0]])
         if dist_ratio == 0 and len(indx) > 0: # only using threshold, not using ratio
             if dotprods[indx[0]] > dotprod_threshold:
-                ##如果与最大值距离较远的地方还有score差不多的点，则舍弃这个最大值对应的点
                 dotprod2ms = []
                 for j in range(desc2_size[0]):
                     desc2[j, :] = (desc2[j, :] - min(desc2[j, :])) / (max(desc2[j, :]) - min(desc2[j, :]) + 1.0E-08)
@@ -291,7 +288,7 @@ def match(kp1, kp2, desc1, desc2, imsize,dotprod_threshold,zone_ratio):
                     contnum = contnum + 1
                     matchscores[i] = int(indx[0])
                     scoresvalue[i] = float(dotprods[indx[0]])
-                ## end of 如果与最大值距离较远的地方还有score差不多的点，则舍弃这个最大值对应的点
+                ## end of 
                 # contnum = contnum + 1
                 # matchscores[i] = int(indx[0])
                 # scoresvalue[i] = float(dotprods[indx[0]])
@@ -342,9 +339,8 @@ def plot_matches(im1, im2, locs1, locs2, matchscores, scorevalues, name1, name2,
     sizz = len(matchscores.nonzero()[0])
     if sizz > max_num:
         sizz = max_num
-    ## 绘制对应点图
     for i in range(sizz):
-        m = int(matchscores[indx[i]]) # 从相似度最高的点对开始判断，这样一个区域多个点对的时候，只留下相似度最高的一对
+        m = int(matchscores[indx[i]]) #
         jeep=0
         if len(matchlocs1)>0:
             for alr in matchlocs1:
@@ -367,9 +363,8 @@ def plot_matches(im1, im2, locs1, locs2, matchscores, scorevalues, name1, name2,
     #plt.show()
     plt.savefig(name1)
     #plt.show()
-    plt.close('all')  # 关闭所有 figure windows
+    plt.close('all')  
 
-    # ## 加入mask，限制范围
     #
     # if os.path.exists(os.path.join(maskfile, str(imgname) + '_1_mask.jpg')):
     #     print('mask:', os.path.join(maskfile, str(imgname) + '_1_mask.jpg'))
@@ -385,7 +380,7 @@ def plot_matches(im1, im2, locs1, locs2, matchscores, scorevalues, name1, name2,
     #     matchlocs1 = lmk1n
     #     matchlocs2 = lmk2n
 
-    ## 绘制对应线图
+
     plt.imshow(im3)
     cols1 = im1.shape[1]
     for i in range(len(matchlocs1)):
@@ -393,7 +388,7 @@ def plot_matches(im1, im2, locs1, locs2, matchscores, scorevalues, name1, name2,
     axis('off')
     #plt.show()
     plt.savefig(name2)
-    plt.close('all')  # 关闭所有 figure windows
+    plt.close('all')  
     # print('the match number:', matchnum)
 
     plt.imshow(im3)
@@ -404,13 +399,13 @@ def plot_matches(im1, im2, locs1, locs2, matchscores, scorevalues, name1, name2,
     axis('off')
     #plt.show()
     plt.savefig(name1)
-    plt.close('all')  # 关闭所有 figure windows
+    plt.close('all') 
 
     return matchlocs1, matchlocs2
 
 def localmean(xy, img):
     imsize = np.shape(img)
-    rgratio = 0.02 # 两边各0.02
+    rgratio = 0.02 
     pixnum = 0
     intensitysum = 0
     for i in range(int(xy[0]-rgratio*imsize[0]),int(xy[0]+rgratio*imsize[0])):
@@ -472,7 +467,6 @@ def siftflowdesc(filtered_coords, sift):
 def multiscale_match(sift12flip, i, siftflowdir1, siftflowdir2, siftflowdir3, kp1, kp2, imsize,dotprod_threshold, zone_ratio):
     siftflow1name = str(i) + 'sift1.mat'
     siftflow2name = str(i) + 'sift2.mat'
-    # kp1 = [[0, 0], [176, 371]]
     filtered_coords1 = kp1
     filtered_coords2 = kp2
     descindex = 1

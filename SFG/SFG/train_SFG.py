@@ -121,7 +121,7 @@ if args.checkpoint is None or args.clear_steps:
 
 # initiate
 from network import get_pipeline_SFG
-pipe = get_pipeline(args.network, ctx=ctx, config=config)
+pipe = get_pipeline_SFG(args.network, ctx=ctx, config=config)
 lr_schedule = dataset_cfg.optimizer.learning_rate.get(None)
 if lr_schedule is not None:
 	pipe.lr_schedule = lr_schedule
